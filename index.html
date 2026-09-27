@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vendor Directory</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --bg:#F5F6F7;
+    --surface:#FFFFFF;
+    --ink:#0E2841;
+    --ink-body:#23303B;
+    --ink-soft:#5C6B76;
+    --ink-faint:#8B98A1;
+    --line:#E8E8E8;
+    --accent:#E97132;
+    --accent-hover:#C85A1F;
+    --accent-soft:#FCE7D8;
+    --danger:#A02B93;
+    --warn:#B3261E;
+    --warn-bg:#FBEAEA;
+    --radius:10px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink-body);
+    font-family:'Poppins', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  #root{ max-width:1180px; margin:0 auto; padding:36px 28px 80px; }
+
+  /* ---------- Header ---------- */
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 6px;
+  }
+  h1{
+    font-family:'Poppins', sans-serif;
+    font-weight:800;
+    font-size:32px;
+    margin:0 0 22px;
+    letter-spacing:-0.02em;
+    color:var(--ink);
+  }
+
+  .toolbar{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-bottom:18px;
+  }
+  .search-wrap{
+    position:relative;
+    flex:1 1 260px;
+  }
+  .search-wrap svg{
+    position:absolute; left:12px; top:50%; transform:translateY(-50%);
+    width:15px; height:15px; stroke:var(--ink-faint);
+  }
+  input[type="text"], select, textarea{
+    font-family:'Poppins', sans-serif;
+    font-size:14px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--ink);
+    border-radius:8px;
+    padding:10px 12px;
+  }
+  .search-wrap input{ width:100%; padding-left:34px; }
+  input:focus, select:focus, textarea:focus{
+    outline:2px solid var(--accent);
+    outline-offset:1px;
+  }
+
+  .btn{
+    font-family:'Poppins', sans-serif;
+    font-weight:600;
+    font-size:14px;
+    border:none;
+    border-radius:8px;
+    padding:10px 16px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .btn-primary{ background:var(--accent); color:#fff; }
+  .btn-primary:hover{ background:var(--accent-hover); }
+  .btn-ghost{ background:transparent; border:1px solid var(--line); color:var(--ink); }
+  .btn-ghost:hover{ background:var(--accent-soft); }
+  .btn-danger-text{ background:transparent; border:none; color:var(--danger); font-weight:600; font-size:13px; cursor:pointer; padding:8px 4px; }
+
+  /* ---------- Filters ---------- */
+  .filters{
+    display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+    margin-bottom:26px; padding-bottom:22px; border-bottom:1px solid var(--line);
+  }
+  .filter-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; text-transform:uppercase; letter-spacing:0.1em;
+    color:var(--ink-faint); margin-right:4px;
+  }
+  .chip{
+    font-size:13px; font-weight:500;
+    padding:6px 12px; border-radius:100px;
+    border:1px solid var(--line); background:var(--surface);
+    cursor:pointer; color:var(--ink-soft); user-select:none;
+  }
+  .chip.active{ background:var(--ink); border-color:var(--ink); color:#fff; }
+  .filters select{ min-width:150px; }
+  .clear-link{
+    font-size:13px; color:var(--ink-faint); text-decoration:underline; cursor:pointer; margin-left:auto;
+    background:none; border:none; font-family:'Poppins',sans-serif;
+  }
+
+  .count-line{ font-size:13px; color:var(--ink-faint); margin-bottom:14px; }
+
+  /* ---------- Grid / Cards ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    gap:16px;
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease;
+    display:flex; flex-direction:column;
+  }
+  .card:hover{ transform:translateY(-2px); box-shadow:0 6px 18px rgba(30,36,32,0.08); }
+  .dnu-section{ margin-top:32px; padding-top:22px; border-top:1px solid var(--line); }
+  .dnu-heading{
+    font-family:'Poppins', sans-serif; font-weight:700; font-size:15px;
+    color:var(--warn); margin:0 0 14px; text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .card-dnu{ border-color:#E3B8B8; }
+  .card-dnu:hover{ box-shadow:0 6px 18px rgba(179,38,30,0.12); }
+  .card:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .tab{
+    padding:7px 16px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:#fff;
+  }
+  .card-body{ padding:16px; flex:1; display:flex; flex-direction:column; gap:8px; }
+  .vendor-name{
+    font-family:'Poppins', sans-serif;
+    font-weight:700; font-size:18px; line-height:1.25;
+    color:var(--ink);
+  }
+  .meta-row{
+    font-size:13px; color:var(--ink-soft);
+    display:flex; align-items:center; gap:6px;
+  }
+  .meta-row svg{ width:13px; height:13px; stroke:var(--ink-faint); flex-shrink:0; }
+  .notes-preview{
+    font-size:13px; color:var(--ink-faint);
+    line-height:1.4;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+    margin-top:2px;
+  }
+
+  /* ---------- Empty / loading ---------- */
+  .empty-state, .loading-state{
+    text-align:center; padding:80px 20px; color:var(--ink-faint);
+  }
+  .empty-state h2{
+    font-family:'Poppins', sans-serif; font-weight:800; color:var(--ink); font-size:20px; margin-bottom:8px;
+  }
+  .empty-state p{ font-size:14px; margin-bottom:20px; }
+
+  /* ---------- Modal ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(20,26,20,0.45);
+    display:flex; align-items:flex-start; justify-content:center;
+    padding:40px 20px; overflow-y:auto; z-index:50;
+  }
+  .modal{
+    background:var(--surface); border-radius:14px; width:100%; max-width:520px;
+    padding:28px; margin-top:10px;
+  }
+  .modal h2{
+    font-family:'Poppins', sans-serif; font-weight:800; font-size:22px; margin:0 0 20px;
+  }
+  .field{ margin-bottom:14px; display:flex; flex-direction:column; gap:6px; }
+  .field label{ font-size:12px; font-weight:600; color:var(--ink-soft); }
+  .field input, .field select, .field textarea{ width:100%; }
+  .field-row{ display:flex; gap:12px; }
+  .field-row .field{ flex:1; }
+  textarea{ resize:vertical; min-height:64px; font-family:'Poppins',sans-serif; }
+  .dnu-field{ background:#FBEAEA; border:1px solid #E3B8B8; border-radius:8px; padding:10px 12px; }
+  .dnu-checkbox-label{ display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--warn); cursor:pointer; }
+  .dnu-checkbox-label input{ width:16px; height:16px; accent-color:var(--warn); }
+  .dnu-field textarea{ margin-top:10px; width:100%; min-height:50px; }
+  .modal-actions{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:22px; padding-top:16px; border-top:1px solid var(--line);
+  }
+  .modal-actions-right{ display:flex; gap:10px; }
+
+  @media (max-width:520px){
+    #root{ padding:24px 16px 60px; }
+    h1{ font-size:26px; }
+    .field-row{ flex-direction:column; gap:0; }
+  }
+</style>
+</head>
+<body>
+<div id="root">
+  <p class="eyebrow">Team resource · shared with everyone on this link</p>
+  <h1>Vendor Directory</h1>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Search by name, contact, or notes…">
+    </div>
+    <button class="btn btn-ghost" id="exportBtn">Export to Excel</button>
+    <button class="btn btn-primary" id="addBtn">+ Add vendor</button>
+  </div>
+
+  <div class="filters" id="filterBar">
+    <span class="filter-label">Category</span>
+    <div id="categoryChips" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+    <span class="filter-label" style="margin-left:8px;">Location</span>
+    <select id="locationSelect"><option value="">All locations</option></select>
+    <button class="clear-link" id="clearFilters">Clear filters</button>
+  </div>
+
+  <div id="countLine" class="count-line"></div>
+  <div id="content"></div>
+</div>
+
+<!-- Firebase (replaces Claude artifact's window.storage — same get/set shape, backed by Firestore) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCDgDzg0FbHdvHuyHBxKo_UC2_Y9bUOjYc",
+    authDomain: "sourcing-directory.firebaseapp.com",
+    projectId: "sourcing-directory",
+    storageBucket: "sourcing-directory.firebasestorage.app",
+    messagingSenderId: "341386104099",
+    appId: "1:341386104099:web:6f7e13e5793934a49e1096"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const _db = firebase.firestore();
+
+  // Shim matching the original window.storage.get/set(key, shared) -> {key,value,shared}|null
+  // interface, so the rest of the app's code (loadVendors, saveVendors, seed blocks, etc.)
+  // needs zero changes. All data lives in a single Firestore collection called "kv".
+  window.storage = {
+    get: async (key) => {
+      const doc = await _db.collection('kv').doc(key).get();
+      if (!doc.exists) throw new Error('Key not found: ' + key);
+      return { key, value: doc.data().value, shared: true };
+    },
+    set: async (key, value) => {
+      await _db.collection('kv').doc(key).set({ value });
+      return { key, value, shared: true };
+    },
+  };
+</script>
+
+<script>
+(function(){
+  // Every category from the original spreadsheet gets its own fixed color, so no two
+  // ever collide. Custom categories someone types in get a deterministic color too,
+  // spread around the hue wheel rather than picked from a small repeating set.
+  const CATEGORY_COLORS = {
+    'Upholstery': '#156082',
+    'Casework': '#6B4C6B',
+    'Window': '#2C7A7B',
+    'Plaster': '#8B6F47',
+    'Stone': '#5C6B76',
+    'Fabricators': '#3D5A80',
+    'Rug Repair': '#A0522D',
+    'Storage': '#4A5859',
+    'Moving/Install': '#C98A2C',
+    'Framing': '#7A6C53',
+    'Cleaning': '#0F9ED5',
+    'Contractors': '#196B24',
+    'Painters': '#E97132',
+    'Wallpaper Install': '#A02B93',
+    'Furniture Repair': '#B5533C',
+    'Showrooms': '#4EA72E',
+    'Other': '#5B5F97',
+    'Florists': '#C2185B',
+    'Consignment/Auction/Estate Sales': '#8D6E63',
+  };
+  function colorForCategory(cat){
+    if (CATEGORY_COLORS[cat]) return CATEGORY_COLORS[cat];
+    let hash = 0;
+    for (let i=0;i<cat.length;i++){ hash = (hash*31 + cat.charCodeAt(i)) >>> 0; }
+    const hue = hash % 360;
+    const sat = 45 + (hash % 20);
+    const light = 32 + ((hash >>> 8) % 10);
+    return `hsl(${hue}, ${sat}%, ${light}%)`;
+  }
+
+  let vendors = [];
+  let loaded = false;
+  let editingId = null;
+  let filters = { search:'', category:'', location:'' };
+  let justImported = 0;
+
+  const el = (id) => document.getElementById(id);
+  const content = el('content');
+
+  function escapeHtml(str){
+    return (str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  // One-time seed from the team's original spreadsheet (LOCAL_VENDORS___WORKROOMS.xlsx)
+  const SEED_VENDORS = [{"location": "Los Angeles", "category": "Casework", "name": "Eworkshoppe", "address": "", "phone_main": "", "website": "", "contact_name": "Michael Yglesias", "contact_role": "", "email": "", "price_tier": "", "lead_time": "", "dfa": "", "notes": ""}, {"location": "Los Angeles", "category": "Wallpaper Install", "name": "Fine Art Restoration", "address": "", "phone_main": "", "website": "", "contact_name": "Henri", "contact_role": "", "email": "", "price_tier": "", "lead_time": "", "dfa": "", "notes": ""}, {"location": "Los Angeles", "category": "Furniture Repair", "name": "Elite Fine Furniture", "address": "3221 N Alameda St Suite K Compton,\u00a0CA 90222", "phone_main": "Cell: (323) 715-8178 Office: (424) 338-3999", "website": "", "contact_name": "Giovanni Mendoza", "contact_role": "", "email": "", "price_tier": "", "lead_time": "", "dfa": "", "notes": ""}, {"location": "Los Angeles", "category": "Furniture Repair", "name": "Pontovi", "address": "", "phone_main": "(424) 343-4990", "website": "", "contact_name": "Constance", "contact_role": "", "email": "Constance@Pontovi.com", "price_tier": "", "lead_time": "", "dfa": "", "notes": ""}, {"location": "Los Angeles", "category": "Furniture Repair", "name": "Joseph Reardon Antique Restoration", "address": "", "phone_main": "(626) 355-1840", "website": "", "contact_name": "", "contact_role": "", "email": "", "price_tier": "", "lead_time": "", "dfa": "", "notes": ""}, {"location": "Los Angeles", "category": "Furniture Repair", "name": "Furniture Repair", "address": "1552 W 139th St. Gardena, CA 90249", "phone_main": "(310) 413-3000", "website": "", "contact_name": "Dario", "contact_role": "", "email": "", "price_tier": "", "lead_time": "", "dfa": "", "notes": ""}, {"location": "Los Angeles", "category": "Furniture Repair", "name": "Cane & Basket Supply Co.", "address": "1283 S. Cochran Avenue Los Angeles, CA 90019", "phone_main": "(323) 939-9644", "website": "", "contact_name": "", "contact_role": "", "email": "info@caneandbasket.com", "price_tier": "", "lead_time": "", "dfa": "", "notes": ""}, {"location": "Los Angeles", "category": "Furniture Repair", "name": "Sully Restoration", "address": "1843 South Orange Dr, Los Angeles", "phone_main": "(310) 721-3435", "website": "", "contact_name": "", "contact_role": "", "email": "contact@sullyrestoration.com", "price_tier": "", "lead_time": "", "dfa": "", "notes": ""}, {"location": "Los Angeles", "category": "Furniture Repair", "name": "Designer's Choice Inc.", "address": "5530 W Adams Blvd. Los Angeles, CA 90016", "phone_main": "(323) 930-0969", "website": "", "contact_name": "", "contact_role": "", "email": "", "price_tier": "", "lead_time": "", "dfa": "", "notes": ""}, {"location": "Los Angeles", "category": "Other", "name": "Couverture Covers", "address": "22930 Lockness Ave, Unit A, Torrance, CA 90501", "phone_main": "(310) 400-3882", "website": "couverturecovers.com", "contact_name": "Jessica", "contact_role": "", "email": "jessica@couverturecovers.com", "price_tier": "", "lead_time": "", "dfa": "", "notes": ""}, {"location": "San Francisco", "category": "Stone", "name": "Pietra Fina", "address": "23190 Connecticut St, Hayward, CA 94545", "phone_main": "Office: (510) 670-1010", "website": "https://pietrafina.com/", "contact_name": "Rey Caraballo", "contact_role": "REP", "email": "rey@pietrafina.com", "price_tier": "", "lead_time": "", "dfa": "", "notes": "Quick to respond, when not meeting with a client. Call if you don\u2019t hear back within 1-2 days. Large warehouse with healthy stock of materials. Great to work with, always sends additional photos and videos of material. Competitive pricing Provides samples."}, {"location": "San Francisco", "category": "Stone", "name": "Evolv Surfaces", "address": "825 Potter St, Berkeley, CA 94710", "phone_main": "Office: (415) 767-4600", "website": "https://evolvsurfaces.com/", "contact_name": "Bill Gamble", "contact_role": "REP", "email": "bill@evolvsurfaces.com", "price_tier": "", "lead_time": "", "dfa": "", "notes": "Quick to respond \u2013 typically within 30 minutes. Great to work with, Bill and team are very helpful! Can accommodate additional photos and videos. Warehouse isn\u2019t large and materials is fairly stocked. Does not provide samples."}, {"location": "San Francisco", "category": "Stone", "name": "Haussmann Stone", "address": "1963 Alpine Way, Hayward, CA 94545", "phone_main": "Office: (510) 782-5100", "website": "https://haussmannstone.com/", "contact_name": "John Pongco", "contact_role": "REP", "email": "J.pongco@haussmannstone.com", "price_tier": "", "lead_time": "", "dfa": "", "notes": "New vendor, but great to work with and very knowledgeable about the materials. Response varies \u2013 30 minutes to 2 hours. Following up via email and then a phone is always effective. Competitive pricing Specializes in Limestone Provides samples."}, {"location": "San Francisco", "category": "Stone", "name": "IRG Stone", "address": "Brisbane, CA (Multiple locations in the Bay Area)", "phone_main": "(415) 657-0280", "website": "https://irgstone.com/", "contact_name": "Jogreet Chadha", "contact_role": "REP", "email": "jogreet@marblecompany.com", "price_tier": "", "lead_time": "", "dfa": "", "notes": "Typically responds within the hour, when not meeting with a client. Following up via email and a quick phone call is always effective. Great to work with, knowledgeable and great with sourcing materials. Main showroom is in Brisbane, CA. 2 other locations are in Dublin CA, and Sacramento. Competitive pricing. Can accommodate additional photos and requires more pushing when requesting videos. Provides samples."}, {"location": "San Francisco", "category": "Stone", "name": "Bedrosians", "address": "139 Marco Way, South San Francisco, CA 94080", "phone_main": "(650) 876-0100", "website": "bedrosians.com", "contact_name": "Meleza SaenzPardo", "contact_role": "REP", "email": "meleza.saenzpardo@bedrosians.com", "price_tier": "", "lead_time": "", "dfa": "", "notes": "Quick response, typically within the hour. Great to work with, knowledgeable about the material and is great with sourcing. Main showroom is in South San Francisco. 2 other locations are in Hayward CA, and San Jose. Competitive pricing. Provides samples, if available. Slabs are harder to get a hold of unless they have a remnant piece."}, {"location": "San Francisco", "category": "Stone", "name": "Carmel Stone", "address": "3160 W Bayshore Rd, Palo Alto, CA 94303", "phone_main": "(650) 800-7840", "website": "https://carmelimports.com/locations/natural-stone-supplier-palo-alto-ca/", "contact_name": "Reba Zavala", "contact_role": "REP", "email": "reba@carmelimports.com", "price_tier": "", "lead_time": "", "dfa": "", "notes": "Quick response, typically within the hour. New vendor, but very knowledgeable about the materials Great to work with, knowledgeable about the material and is great with sourcing. Can accommodate additional photos, possibly videos too. Provides samples."}];
+
+  function seedToVendor(s, idx){
+    return {
+      id: 'seed_' + idx + '_' + Date.now().toString(36),
+      name: s.name,
+      category: s.category,
+      location: s.location,
+      address: s.address || '',
+      contactName: s.contact_name || '',
+      phone: s.phone_main || '',
+      email: s.email || '',
+      website: s.website || '',
+      priceTier: s.price_tier || '',
+      leadTime: s.lead_time || '',
+      notes: s.notes || '',
+    };
+  }
+
+  async function loadVendors(){
+    content.innerHTML = '<div class="loading-state">Loading the directory…</div>';
+    try{
+      const res = await withTimeout(window.storage.get('vendors', true), 8000, 'Load');
+      vendors = res && res.value ? JSON.parse(res.value) : [];
+    }catch(e){
+      vendors = [];
+    }
+
+    // One-time import of the team's original spreadsheet, only if nobody has run it yet
+    let alreadySeeded = false;
+    try{
+      const flag = await window.storage.get('seeded_from_spreadsheet_v1', true);
+      alreadySeeded = !!(flag && flag.value);
+    }catch(e){ alreadySeeded = false; }
+
+    if (!alreadySeeded && vendors.length === 0){
+      vendors = SEED_VENDORS.map(seedToVendor);
+      try{
+        await window.storage.set('vendors', JSON.stringify(vendors), true);
+        await window.storage.set('seeded_from_spreadsheet_v1', 'true', true);
+        justImported = vendors.length;
+      }catch(e){ /* seeding is best-effort */ }
+    }
+
+    // One-time addition of flagged "do not use" vendors
+    let dnuSeeded = false;
+    try{
+      const flag2 = await window.storage.get('seeded_dnu_v1', true);
+      dnuSeeded = !!(flag2 && flag2.value);
+    }catch(e){ dnuSeeded = false; }
+
+    if (!dnuSeeded){
+      const dnuVendors = [
+        {
+          id: 'dnu_1_' + Date.now().toString(36),
+          name: 'Niche Beverly',
+          category: 'Other',
+          location: 'Los Angeles',
+          address: '', contactName: '', phone: '', email: '', website: '',
+          priceTier: '', leadTime: '', notes: '',
+          doNotUse: true, dnuReason: '',
+        },
+        {
+          id: 'dnu_2_' + Date.now().toString(36),
+          name: 'Arch Custom Designs',
+          category: 'Other',
+          location: 'Los Angeles',
+          address: '', contactName: 'Claudia', phone: '', email: '', website: '',
+          priceTier: '', leadTime: '', notes: '',
+          doNotUse: true, dnuReason: '',
+        },
+      ];
+      vendors = [...vendors, ...dnuVendors];
+      try{
+        await window.storage.set('vendors', JSON.stringify(vendors), true);
+        await window.storage.set('seeded_dnu_v1', 'true', true);
+      }catch(e){ /* seeding is best-effort */ }
+    }
+
+    // One-time import of the florist spreadsheet (Florists_By_Location.xlsx)
+    let floristsSeeded = false;
+    try{
+      const flag3 = await window.storage.get('seeded_florists_v1', true);
+      floristsSeeded = !!(flag3 && flag3.value);
+    }catch(e){ floristsSeeded = false; }
+
+    if (!floristsSeeded){
+      const FLORIST_SEED = [{"name": "Eucharis Studio", "category": "Florists", "location": "Los Angeles", "address": "17951 Sky Park Circle, Bldg. 35 Ste. N, Irvine, CA 92614", "contactName": "Dodie", "phone": "(949) 287-2375", "email": "Dodie@eucharis.studio", "website": "https://eucharis.studio/", "instagram": "https://www.instagram.com/eucharis.studio/", "priceTier": "", "leadTime": "", "notes": "Office: (949) 418-8016"}, {"name": "French Florist", "category": "Florists", "location": "Los Angeles", "address": "", "contactName": "", "phone": "", "email": "", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Mayesh", "category": "Florists", "location": "Los Angeles", "address": "LAX", "contactName": "", "phone": "(888) 462-9374", "email": "rprothro@mayesh.com", "website": "mayesh.com", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Emblem Flowers", "category": "Florists", "location": "Los Angeles", "address": "Pasadena, CA", "contactName": "", "phone": "(626) 586-7449", "email": "info@emblem-flowers.com", "website": "https://www.emblem-flowers.com/", "instagram": "https://www.instagram.com/emblemflowers/?hl=en", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "J Flowers", "category": "Florists", "location": "Los Angeles", "address": "2621 Artesia Blvd, Redondo Beach, CA, 90278", "contactName": "", "phone": "3103741596", "email": "info@jflowershop.com", "website": "https://jflowershop.com", "instagram": "https://www.instagram.com/jflowershop/", "priceTier": "", "leadTime": "", "notes": "North Redondo, Los Angeles, Long Beach, Fort Macarthur, Baldwin Hills, Rancho Dominguez, Crystal City, Palos Verdes Peninsula, Hancock, Playa Vista, Westchester, Crenshaw, and Windsor Hills. Rch Palos Vrd, Greenmead, South, Torrance, Inglewood, Palos Verdes Estates, Gardena, Pls Vrds Pnsl, Rollng Hills Estates, Redondo Beach, Rolling Hills Estates, San Pedro, Carson, Manhattan Beach, Rancho Palos Verdes, Rch Palos Vrd, Wilmington, Greenmead, Hawthorne, Holly Park, Lawndale, Playa Del Rey, Lomita, South, Rancho Domingz, Culver City, Hermosa Beach, Lennox, Harbor City, Bradley International, Wagner, Compton, El Segundo, Hollyglen, Rolling Hills, Venice, Terminal Island"}, {"name": "Empty Vase", "category": "Florists", "location": "Los Angeles", "address": "9033 N Santa Monica Blvd, Los Angeles, CA 90069", "contactName": "", "phone": "(310) 278-1988", "email": "sales@emptyvase.com", "website": "https://emptyvase.com/", "instagram": "https://www.instagram.com/theemptyvase/", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Marigold", "category": "Florists", "location": "San Francisco", "address": "2681 21st St., San Francisco, CA 94110", "contactName": "", "phone": "(415) 660-7933", "email": "hello@marigoldsf.com", "website": "https://www.marigoldsf.com/", "instagram": "https://www.instagram.com/marigold_sf/", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Bloom Gallery", "category": "Florists", "location": "San Francisco", "address": "1160 4th Street, San Francisco, CA-94158", "contactName": "", "phone": "4155458559", "email": "", "website": "https://www.bloom.gallery/", "instagram": "https://www.instagram.com/bloomgalleryflowers/", "priceTier": "", "leadTime": "", "notes": "Bloom Gallery Flowers is located in San Francisco and hand delivers flowers in Mission Bay as well as Mission District, Pacific Heights, Nob Hill, Castro District, Haight-Ashbury, Marina District, Chinatown, Richmond District, Sunset, Potrero Hill, South of Market (SoMa), Hayes Valley, North Beach, Financial District, Fillmore District"}, {"name": "Lollia Blooms Floral Design", "category": "Florists", "location": "San Diego", "address": "6012 La Granda, Rancho Santa Fe, CA 96027", "contactName": "", "phone": "(858) 759-8933", "email": "", "website": "https://lolliablooms.com/", "instagram": "https://www.instagram.com/lollia.blooms/?hl=en", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "GARDEN CITY FLORAL AND GIFTS", "category": "Florists", "location": "Missoula", "address": "2510 Spurgin Rd STE A, Missoula, MT 59804", "contactName": "Kelleigh", "phone": "406-543-6627", "email": "hello@gardencityfloral.com", "website": "https://www.gardencityfloral.com/", "instagram": "https://www.instagram.com/gardencityfloral/?hl=en", "priceTier": "", "leadTime": "", "notes": "Missoula and following Zips: 59804, 59801, 59808, 59806, 59807, 59847, 59812, 59803, 59851, 59802"}, {"name": "MUMS FLOWERS", "category": "Florists", "location": "Kalispell", "address": "520 E 2nd Street, Whitefish,, MT 59937", "contactName": "", "phone": "406 862 2757", "email": "hello@mumsflowers.net", "website": "https://mumsflowersonline.com/", "instagram": "https://www.instagram.com/mumsflowersmt/", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "PONTIUS FLOWER SHOP", "category": "Florists", "location": "Harbor Springs", "address": "592 E Main St., Harbor Springs, MI 49740", "contactName": "", "phone": "231-526-9690", "email": "pontiusflowers@gmail.com", "website": "https://www.pontiusflowers.com/", "instagram": "https://www.instagram.com/arpontius/?ref=badge", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "MIBELLA ROSA", "category": "Florists", "location": "Houston", "address": "1815 Taylor St., Houston, TX 77007", "contactName": "", "phone": "(832) 429-8283", "email": "hello@mibellarosa.com", "website": "https://www.mibellarosa.com/", "instagram": "https://www.instagram.com/mibellarosa/?hl=en", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "BLXXM", "category": "Florists", "location": "New York", "address": "", "contactName": "", "phone": "", "email": "", "website": "https://www.blxxm.co/portfolio?utm_source=ig&utm_medium=social&utm_content=link_in_bio", "instagram": "https://www.blxxm.co/portfolio?utm_source=ig&utm_medium=social&utm_content=link_in_bio", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "COLEEN ROSE FLORALS", "category": "Florists", "location": "New York", "address": "", "contactName": "", "phone": "", "email": "", "website": "https://www.colleenroseflorals.com/gallery", "instagram": "https://www.instagram.com/colleenroseflorals/", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "MARTIN DAVIS FLOWERS", "category": "Florists", "location": "New York", "address": "", "contactName": "", "phone": "", "email": "contact@martindavisflowers.com", "website": "", "instagram": "https://www.instagram.com/martindavisflowers?igsh=MTVsZnVoZ3o5eHZzdQ==", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Fleur De Lis Florists", "category": "Florists", "location": "Phoenix", "address": "17461 N 54th Ave., Glendale, AZ 85308", "contactName": "", "phone": "(818) 213-8988", "email": "fleurdelisflorists@gmail.com", "website": "https://fleurdelisflorists.com/", "instagram": "https://www.instagram.com/fdlflorists/", "priceTier": "", "leadTime": "", "notes": ""}];
+
+      const newFlorists = FLORIST_SEED.map((f, idx) => ({
+        id: 'florist_' + idx + '_' + Date.now().toString(36),
+        ...f,
+      }));
+      vendors = [...vendors, ...newFlorists];
+      try{
+        await window.storage.set('vendors', JSON.stringify(vendors), true);
+        await window.storage.set('seeded_florists_v1', 'true', true);
+      }catch(e){ /* seeding is best-effort */ }
+    }
+
+
+    // One-time import of stone/marble slab yard sources (ODG_Stone_Slab_Yard_Sources)
+    let stoneSeeded = false;
+    try{
+      const flag4 = await window.storage.get('seeded_stone_v1', true);
+      stoneSeeded = !!(flag4 && flag4.value);
+    }catch(e){ stoneSeeded = false; }
+
+    if (!stoneSeeded){
+      const STONE_SEED = [{"name": "Arizontal Tile", "category": "Stone", "location": "Orange County", "address": "", "contactName": "Heather Hernandez", "phone": "", "email": "hhernandez@arizonatile.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Bedrosians Tile & Stone", "category": "Stone", "location": "Orange County", "address": "", "contactName": "", "phone": "(714) 778-8453", "email": "cay.dean@bedrosians.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": "Marble Slabs | Bedrosians Tile & Stone"}, {"name": "Gramar Stone", "category": "Stone", "location": "Orange County", "address": "", "contactName": "", "phone": "714-5332244", "email": "mike@gramarstone.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": "GRAMAR \u2013 Slabyard & Design Showroom (gramarstone.com)"}, {"name": "Marbolis", "category": "Stone", "location": "Orange County", "address": "", "contactName": "Marco Salvini", "phone": "", "email": "marco@marbolisinc.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Marmol Export", "category": "Stone", "location": "Orange County", "address": "", "contactName": "Alex Dicara", "phone": "", "email": "adicara@marmolusa.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Ollin", "category": "Stone", "location": "Orange County", "address": "", "contactName": "Michael J. Hamelin", "phone": "", "email": "michael@ollinstone.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Roman Marble Inc", "category": "Stone", "location": "Orange County", "address": "", "contactName": "", "phone": "Tel: 714-999-5475", "email": "maz@romanmarbleinc.com", "website": "http://romanmarbleinc.com/slabs/", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "The Slab Studio", "category": "Stone", "location": "Orange County", "address": "", "contactName": "Josiah Lilly", "phone": "", "email": "josiah@theslabstudio.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Venetian Stone", "category": "Stone", "location": "Orange County", "address": "", "contactName": "Saundra D. Meyer", "phone": "", "email": "saundra@venetiantsg.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": "Does in-house fabrication"}, {"name": "Walker Zanger", "category": "Stone", "location": "Orange County", "address": "", "contactName": "Holly Valdez", "phone": "", "email": "hvaldez@walkerzanger.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Bedrosians tile & Stone", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "", "phone": "", "email": "", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": "Marble Slabs | Bedrosians Tile & Stone"}, {"name": "Compas", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "", "phone": "", "email": "dimitri@compasstone.com", "website": "https://compasstone.com/", "instagram": "", "priceTier": "", "leadTime": "", "notes": "Does in-house fabrication | Unique one of a kind stones $$$$"}, {"name": "Gem", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "Karlin Lazar", "phone": "", "email": "karlin@gem-international.net", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Geo Gallery", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "Jaki Grainger", "phone": "(661) 816-4938", "email": "jaki@geogallery.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": "AKA \"Stone Whisperer\" - sources stones from local stone vendors"}, {"name": "Marble Unlimited", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "Jimena Santovena", "phone": "", "email": "jsantovena@marbleunlimitedinc.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Modul Marble", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "Sevak Kalayci", "phone": "", "email": "sevak@arcsurfaces.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": "Also listed with rep email sevak@arcsurfaces.com (possibly a related/former company name)."}, {"name": "Pacific shore stones", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "", "phone": "Phone: (818) 765-7454", "email": "miriam@pacificshorestones.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": "Pacific Shore Stones Los Angeles | Exotic Natural Stone Slabs"}, {"name": "RioStone", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "", "phone": "(310) 221-5999", "email": "fabian@riostones.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": "Natural stones: Marble, Granite, Quartzite in Los Angeles - Los Angeles RIOSTONES"}, {"name": "Royal Stone & Tile", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "", "phone": "310 477-3223", "email": "christian@royalstonela.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": "Marble Sales in Los Angeles, CA (royalstonela.com)"}, {"name": "Southland Stone", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "Sumia", "phone": "", "email": "sumia@southlandstone.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Stoneland", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "Camilo Fillion", "phone": "", "email": "camilo@stonelandusa.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": "Does in-house fabrication"}, {"name": "Stone Mart", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "Kim Shorman", "phone": "", "email": "kim@stonemart.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Stone Source", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "David Alonzo", "phone": "", "email": "dalonzo@stonesource.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Stoneville", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "", "phone": "818-255-5955", "email": "gia@stonevilleusa.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": "SLABS/COUNTERTOPS - Stoneville USA Inc"}, {"name": "Tristone", "category": "Stone", "location": "Los Angeles", "address": "", "contactName": "Sara Goldman", "phone": "", "email": "sara@tristoneandtile.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Amazon Stones", "category": "Stone", "location": "San Diego", "address": "", "contactName": "Caio Travassos", "phone": "", "email": "caio@amazonstones.net", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Tutto Marmo Inc", "category": "Stone", "location": "San Diego", "address": "", "contactName": "Massimo Perinelli", "phone": "", "email": "massimo@tuttomarmoinc.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Da Vinci Marble", "category": "Stone", "location": "San Francisco", "address": "", "contactName": "Kelly", "phone": "", "email": "kgoodyear@davincimarble.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Aria Stone", "category": "Stone", "location": "Texas", "address": "", "contactName": "Gabriella Richey", "phone": "", "email": "grichey@aristonegallery.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Marmi Stone", "category": "Stone", "location": "Georgia", "address": "", "contactName": "Cindy Badalamente", "phone": "", "email": "cbadalamente@marmistone.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": "Does in-house fabrication"}, {"name": "Meta Marble & Granite", "category": "Stone", "location": "Seattle", "address": "", "contactName": "", "phone": "", "email": "", "website": "http://www.metamarbleandgranite.com/", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "BANDA", "category": "Stone", "location": "New York", "address": "", "contactName": "Agnes Pisalska", "phone": "", "email": "agnes@bandastonegallery.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "ABC Stone - Manhattan", "category": "Stone", "location": "New York", "address": "", "contactName": "Violetta Porowska", "phone": "", "email": "violetta@abcworldwidestone.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "ABC Stone - Brooklyn", "category": "Stone", "location": "New York", "address": "", "contactName": "Violetta Porowska", "phone": "", "email": "violetta@abcworldwidestone.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "ABC Stone - Hicksville", "category": "Stone", "location": "New York", "address": "", "contactName": "Violetta Porowska", "phone": "", "email": "violetta@abcworldwidestone.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "BAS Stone", "category": "Stone", "location": "New York", "address": "", "contactName": "Matthew Bergey", "phone": "", "email": "mbergey@basstonenyc.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "New York Stone", "category": "Stone", "location": "New York", "address": "", "contactName": "Rami Paradise", "phone": "", "email": "rani@newyorkstone.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Cumar", "category": "Stone", "location": "Boston", "address": "", "contactName": "Carlotta Cubi Mandra", "phone": "", "email": "carlotta.mandra@cumar.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Palmalisa", "category": "Stone", "location": "Italy", "address": "", "contactName": "", "phone": "", "email": "info@palmalisazantedeschi.it", "website": "https://www.palmalisazantedeschi.it/", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "World Stone Marble", "category": "Stone", "location": "Australia", "address": "", "contactName": "", "phone": "", "email": "info@worldstone.com.au", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "MVA", "category": "Fabricators", "location": "Los Angeles", "address": "", "contactName": "", "phone": "", "email": "", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Stone Art", "category": "Fabricators", "location": "Los Angeles", "address": "", "contactName": "", "phone": "", "email": "", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "CG Tile", "category": "Fabricators", "location": "Los Angeles", "address": "", "contactName": "", "phone": "", "email": "", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "(22 Ebay)", "category": "Fabricators", "location": "Los Angeles", "address": "", "contactName": "", "phone": "", "email": "", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "JQ Marble", "category": "Fabricators", "location": "Los Angeles", "address": "", "contactName": "", "phone": "", "email": "", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Stonecraft", "category": "Fabricators", "location": "San Francisco", "address": "", "contactName": "Jeff Thayer", "phone": "", "email": "jeff@stonecrafttileco.com", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}];
+
+      const newStone = STONE_SEED.map((s, idx) => ({
+        id: 'stone_' + idx + '_' + Date.now().toString(36),
+        ...s,
+      }));
+      vendors = [...vendors, ...newStone];
+      try{
+        await window.storage.set('vendors', JSON.stringify(vendors), true);
+        await window.storage.set('seeded_stone_v1', 'true', true);
+      }catch(e){ /* seeding is best-effort */ }
+    }
+
+
+    // One-time import of consignment/auction/estate sale sources
+    let consignSeeded = false;
+    try{
+      const flag5 = await window.storage.get('seeded_consignment_v1', true);
+      consignSeeded = !!(flag5 && flag5.value);
+    }catch(e){ consignSeeded = false; }
+
+    if (!consignSeeded){
+      const CONSIGNMENT_SEED = [{"name": "The Find Consignments", "category": "Consignment/Auction/Estate Sales", "location": "Orange County", "address": "", "contactName": "", "phone": "949 650 3463", "email": "", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Abell Auction Company", "category": "Consignment/Auction/Estate Sales", "location": "Los Angeles", "address": "", "contactName": "", "phone": "323 724 8102", "email": "", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "John Moran Auctioneers", "category": "Consignment/Auction/Estate Sales", "location": "Los Angeles", "address": "", "contactName": "", "phone": "626 793 1833", "email": "", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Andrew Jones Auctions", "category": "Consignment/Auction/Estate Sales", "location": "Los Angeles", "address": "", "contactName": "", "phone": "213 748 8008", "email": "", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}, {"name": "Uniquities Consignment House", "category": "Consignment/Auction/Estate Sales", "location": "Los Angeles", "address": "", "contactName": "", "phone": "310 550 7000", "email": "", "website": "", "instagram": "", "priceTier": "", "leadTime": "", "notes": ""}];
+
+      const newConsignment = CONSIGNMENT_SEED.map((c, idx) => ({
+        id: 'consign_' + idx + '_' + Date.now().toString(36),
+        ...c,
+      }));
+      vendors = [...vendors, ...newConsignment];
+      try{
+        await window.storage.set('vendors', JSON.stringify(vendors), true);
+        await window.storage.set('seeded_consignment_v1', 'true', true);
+      }catch(e){ /* seeding is best-effort */ }
+    }
+
+    loaded = true;
+    render();
+  }
+
+  function withTimeout(promise, ms, label){
+    return Promise.race([
+      promise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error(`${label} timed out`)), ms)),
+    ]);
+  }
+
+  async function saveVendors(){
+    try{
+      await withTimeout(window.storage.set('vendors', JSON.stringify(vendors), true), 6000, 'Save');
+    }catch(e){
+      console.error('Storage error', e);
+      alert('Your change is showing on screen, but saving to the shared directory failed or timed out. Please check your connection and try again, or your change may not stick for others.');
+    }
+  }
+
+  function uniqueSorted(arr){
+    return [...new Set(arr.filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  }
+
+  // The full set of categories and locations from the team's original spreadsheet,
+  // shown as filter/autocomplete options even before any vendor is added under them.
+  const ALL_CATEGORIES = ["Upholstery","Casework","Window","Plaster","Stone","Fabricators",
+    "Rug Repair","Storage","Moving/Install","Framing","Cleaning","Contractors","Painters",
+    "Wallpaper Install","Furniture Repair","Showrooms","Other","Florists","Consignment/Auction/Estate Sales"];
+  const ALL_LOCATIONS = ["Los Angeles","San Francisco","New York","Texas","Montana","Michigan",
+    "San Diego","Salt Lake City","Missoula","Kalispell","Harbor Springs","Houston","Phoenix",
+    "Orange County","Georgia","Seattle","Boston","Italy","Australia"];
+
+  function renderFilterBar(){
+    const categories = uniqueSorted([...ALL_CATEGORIES, ...vendors.map(v=>v.category)]);
+    const locations = uniqueSorted([...ALL_LOCATIONS, ...vendors.map(v=>v.location)]);
+
+    const chipsHtml = categories.map(cat => {
+      const active = filters.category === cat;
+      return `<button class="chip ${active?'active':''}" data-cat="${escapeHtml(cat)}">${escapeHtml(cat)}</button>`;
+    }).join('');
+    el('categoryChips').innerHTML = chipsHtml || '<span style="font-size:13px;color:var(--ink-faint);">No categories yet</span>';
+
+    el('categoryChips').querySelectorAll('.chip').forEach(chip=>{
+      chip.addEventListener('click', ()=>{
+        const cat = chip.getAttribute('data-cat');
+        filters.category = filters.category === cat ? '' : cat;
+        render();
+      });
+    });
+
+    const locSelect = el('locationSelect');
+    const currentVal = filters.location;
+    locSelect.innerHTML = '<option value="">All locations</option>' +
+      locations.map(loc => `<option value="${escapeHtml(loc)}" ${loc===currentVal?'selected':''}>${escapeHtml(loc)}</option>`).join('');
+
+    el('filterBar').style.display = 'flex';
+  }
+
+  function matchesFilters(v){
+    const s = filters.search.trim().toLowerCase();
+    if (s){
+      const hay = [v.name, v.contactName, v.notes, v.email, v.phone].join(' ').toLowerCase();
+      if (!hay.includes(s)) return false;
+    }
+    if (filters.category && v.category !== filters.category) return false;
+    if (filters.location && v.location !== filters.location) return false;
+    return true;
+  }
+
+  function iconPin(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>';
+  }
+  function iconPerson(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>';
+  }
+
+  function renderCards(){
+    if (!vendors.length){
+      content.innerHTML = `
+        <div class="empty-state">
+          <h2>No vendors yet</h2>
+          <p>Add your first vendor to start building the directory.</p>
+          <button class="btn btn-primary" id="emptyAddBtn">+ Add vendor</button>
+        </div>`;
+      el('emptyAddBtn').addEventListener('click', openAddModal);
+      return;
+    }
+
+    const visible = vendors.filter(matchesFilters).sort((a,b)=>a.name.localeCompare(b.name));
+    const active = visible.filter(v => !v.doNotUse);
+    const flagged = visible.filter(v => v.doNotUse);
+
+    el('countLine').textContent = `${visible.length} of ${vendors.length} vendor${vendors.length===1?'':'s'}`;
+
+    if (!visible.length){
+      content.innerHTML = `<div class="empty-state"><h2>No matches</h2><p>Try a different search or clear your filters.</p></div>`;
+      return;
+    }
+
+    let html = '';
+    if (active.length){
+      html += `<div class="grid">${active.map(v=>cardHtml(v)).join('')}</div>`;
+    } else {
+      html += `<div class="empty-state" style="padding:40px 20px;"><p>No active vendors match these filters.</p></div>`;
+    }
+    if (flagged.length){
+      html += `
+        <div class="dnu-section">
+          <h3 class="dnu-heading">Do Not Use (${flagged.length})</h3>
+          <div class="grid">${flagged.map(v=>cardHtml(v)).join('')}</div>
+        </div>`;
+    }
+    content.innerHTML = html;
+
+    content.querySelectorAll('.card').forEach(card=>{
+      card.addEventListener('click', ()=> openEditModal(card.getAttribute('data-id')));
+      card.addEventListener('keydown', (e)=>{ if(e.key==='Enter') openEditModal(card.getAttribute('data-id')); });
+    });
+  }
+
+  function cardHtml(v){
+    const color = v.doNotUse ? 'var(--warn)' : colorForCategory(v.category || 'Uncategorized');
+    const contactBits = [v.contactName, v.phone].filter(Boolean).join(' · ');
+    const priceBits = [v.priceTier, v.leadTime].filter(Boolean).join(' · ');
+    const tabLabel = v.doNotUse ? `Do Not Use · ${escapeHtml(v.category || 'Uncategorized')}` : escapeHtml(v.category || 'Uncategorized');
+    return `
+      <div class="card ${v.doNotUse ? 'card-dnu' : ''}" tabindex="0" data-id="${v.id}">
+        <div class="tab" style="background:${color};">${tabLabel}</div>
+        <div class="card-body">
+          <div class="vendor-name">${escapeHtml(v.name)}</div>
+          ${v.location ? `<div class="meta-row">${iconPin()} ${escapeHtml(v.location)}</div>` : ''}
+          ${v.address ? `<div class="meta-row">${escapeHtml(v.address)}</div>` : ''}
+          ${contactBits ? `<div class="meta-row">${iconPerson()} ${escapeHtml(contactBits)}</div>` : ''}
+          ${v.website ? `<div class="meta-row">${escapeHtml(v.website)}</div>` : ''}
+          ${v.instagram ? `<div class="meta-row">${escapeHtml(v.instagram)}</div>` : ''}
+          ${priceBits ? `<div class="meta-row" style="color:var(--accent); font-weight:600;">${escapeHtml(priceBits)}</div>` : ''}
+          ${v.doNotUse && v.dnuReason ? `<div class="notes-preview" style="color:var(--warn);">${escapeHtml(v.dnuReason)}</div>` : ''}
+          ${v.notes ? `<div class="notes-preview">${escapeHtml(v.notes)}</div>` : ''}
+        </div>
+      </div>`;
+  }
+
+  function render(){
+    if (!loaded) return;
+    renderFilterBar();
+    renderCards();
+  }
+
+  // ---------- Modal ----------
+  function modalHtml(v){
+    v = v || {};
+    return `
+      <div class="overlay" id="overlay">
+        <div class="modal">
+          <h2>${v.id ? 'Edit vendor' : 'Add vendor'}</h2>
+          <div id="vendorForm">
+            <div id="formError" style="display:none; background:#FBEAEA; border:1px solid #E3B8B8; color:var(--warn); border-radius:8px; padding:10px 12px; font-size:13px; margin-bottom:14px;"></div>
+            <div class="field">
+              <label for="f-name">Vendor name *</label>
+              <input type="text" id="f-name" required value="${escapeHtml(v.name)}">
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="f-category">Category *</label>
+                <input type="text" id="f-category" required placeholder="e.g. Catering" value="${escapeHtml(v.category)}" list="categoryList">
+              </div>
+              <div class="field">
+                <label for="f-location">Location *</label>
+                <input type="text" id="f-location" required placeholder="e.g. Austin, TX" value="${escapeHtml(v.location)}" list="locationList">
+              </div>
+            </div>
+            <datalist id="categoryList">${uniqueSorted([...ALL_CATEGORIES, ...vendors.map(x=>x.category)]).map(c=>`<option value="${escapeHtml(c)}">`).join('')}</datalist>
+            <datalist id="locationList">${uniqueSorted([...ALL_LOCATIONS, ...vendors.map(x=>x.location)]).map(l=>`<option value="${escapeHtml(l)}">`).join('')}</datalist>
+            <div class="field">
+              <label for="f-address">Address</label>
+              <input type="text" id="f-address" value="${escapeHtml(v.address)}">
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="f-contact">Contact name</label>
+                <input type="text" id="f-contact" value="${escapeHtml(v.contactName)}">
+              </div>
+              <div class="field">
+                <label for="f-phone">Phone</label>
+                <input type="text" id="f-phone" value="${escapeHtml(v.phone)}">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="f-email">Email</label>
+                <input type="text" id="f-email" value="${escapeHtml(v.email)}">
+              </div>
+              <div class="field">
+                <label for="f-website">Website</label>
+                <input type="text" id="f-website" value="${escapeHtml(v.website)}">
+              </div>
+              <div class="field">
+                <label for="f-instagram">Instagram</label>
+                <input type="text" id="f-instagram" value="${escapeHtml(v.instagram)}">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="f-price">Price ($–$$$$$)</label>
+                <input type="text" id="f-price" value="${escapeHtml(v.priceTier)}">
+              </div>
+              <div class="field">
+                <label for="f-lead">Typical lead time</label>
+                <input type="text" id="f-lead" value="${escapeHtml(v.leadTime)}">
+              </div>
+            </div>
+            <div class="field">
+              <label for="f-notes">Notes</label>
+              <textarea id="f-notes">${escapeHtml(v.notes)}</textarea>
+            </div>
+            <div class="field dnu-field">
+              <label class="dnu-checkbox-label">
+                <input type="checkbox" id="f-dnu" ${v.doNotUse ? 'checked' : ''}>
+                Do not use this vendor
+              </label>
+              <textarea id="f-dnu-reason" placeholder="Why? (e.g. missed deadline, poor quality, unresponsive)" style="display:${v.doNotUse ? 'block' : 'none'};">${escapeHtml(v.dnuReason)}</textarea>
+            </div>
+            <div class="modal-actions">
+              <div>${v.id ? '<button type="button" class="btn-danger-text" id="deleteBtn">Delete vendor</button>' : '<span></span>'}</div>
+              <div class="modal-actions-right">
+                <button type="button" class="btn btn-ghost" id="cancelBtn">Cancel</button>
+                <button type="button" class="btn btn-primary" id="submitBtn">${v.id ? 'Save changes' : 'Add vendor'}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function closeModal(){
+    const overlay = el('overlay');
+    if (overlay) overlay.remove();
+    editingId = null;
+  }
+
+  function openAddModal(){
+    editingId = null;
+    document.body.insertAdjacentHTML('beforeend', modalHtml({}));
+    bindModal();
+  }
+
+  function openEditModal(id){
+    const v = vendors.find(x => x.id === id);
+    if (!v) return;
+    editingId = id;
+    document.body.insertAdjacentHTML('beforeend', modalHtml(v));
+    bindModal();
+  }
+
+  function bindModal(){
+    el('overlay').addEventListener('click', (e)=>{ if (e.target.id === 'overlay') closeModal(); });
+    el('cancelBtn').addEventListener('click', closeModal);
+    el('f-dnu').addEventListener('change', (e)=>{
+      el('f-dnu-reason').style.display = e.target.checked ? 'block' : 'none';
+    });
+    const del = el('deleteBtn');
+    if (del) del.addEventListener('click', ()=>{
+      if (confirm('Delete this vendor? This cannot be undone.')){
+        vendors = vendors.filter(v => v.id !== editingId);
+        closeModal();
+        render();
+        saveVendors();
+      }
+    });
+    async function handleSave(){
+      const data = {
+        name: el('f-name').value.trim(),
+        category: el('f-category').value.trim(),
+        location: el('f-location').value.trim(),
+        address: el('f-address').value.trim(),
+        contactName: el('f-contact').value.trim(),
+        phone: el('f-phone').value.trim(),
+        email: el('f-email').value.trim(),
+        website: el('f-website').value.trim(),
+        instagram: el('f-instagram').value.trim(),
+        priceTier: el('f-price').value.trim(),
+        leadTime: el('f-lead').value.trim(),
+        notes: el('f-notes').value.trim(),
+        doNotUse: el('f-dnu').checked,
+        dnuReason: el('f-dnu-reason').value.trim(),
+      };
+      const missing = [];
+      if (!data.name) missing.push('Vendor name');
+      if (!data.category) missing.push('Category');
+      if (!data.location) missing.push('Location');
+      const errBox = el('formError');
+      if (missing.length){
+        errBox.textContent = `Please fill in: ${missing.join(', ')}.`;
+        errBox.style.display = 'block';
+        if (typeof errBox.scrollIntoView === 'function'){
+          errBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        return;
+      }
+      errBox.style.display = 'none';
+
+      if (editingId){
+        vendors = vendors.map(v => v.id === editingId ? {...v, ...data} : v);
+      } else {
+        data.id = 'v_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+        vendors.push(data);
+      }
+      closeModal();
+      render();
+      saveVendors();
+    }
+    el('submitBtn').addEventListener('click', handleSave);
+    // Let Enter submit from any single-line text field, without relying on native form submission
+    el('vendorForm').querySelectorAll('input[type="text"]').forEach(input => {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter'){
+          e.preventDefault();
+          handleSave();
+        }
+      });
+    });
+  }
+
+  function exportToExcel(){
+    const visible = vendors.filter(matchesFilters).sort((a,b)=>{
+      if (a.category !== b.category) return (a.category||'').localeCompare(b.category||'');
+      return (a.name||'').localeCompare(b.name||'');
+    });
+    if (!visible.length){
+      alert('There are no vendors matching the current filters to export.');
+      return;
+    }
+
+    const headers = ['Name','Category','Location','Address','Contact Name','Phone','Email',
+      'Website','Instagram','Price Tier','Lead Time','Do Not Use','Do Not Use Reason','Notes'];
+
+    const esc = (s) => String(s ?? '')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    const headHtml = headers.map(h =>
+      `<th style="background:#0E2841;color:#ffffff;font-weight:bold;padding:6px 10px;border:1px solid #ccc;">${esc(h)}</th>`
+    ).join('');
+
+    const rowsHtml = visible.map(v => {
+      const catColor = v.doNotUse ? '#FBEAEA' : (CATEGORY_COLORS[v.category] || '#F5F6F7');
+      const catText = v.doNotUse ? '#B3261E' : '#ffffff';
+      const rowBg = v.doNotUse ? '#FDF4F4' : '#ffffff';
+      const cells = [
+        v.name, v.category, v.location, v.address, v.contactName, v.phone, v.email,
+        v.website, v.instagram, v.priceTier, v.leadTime,
+        v.doNotUse ? 'Yes' : '', v.dnuReason, v.notes,
+      ];
+      return '<tr>' + cells.map((val, i) => {
+        const isCategory = i === 1;
+        const style = isCategory
+          ? `background:${catColor};color:${catText};font-weight:bold;padding:6px 10px;border:1px solid #ccc;`
+          : `background:${rowBg};padding:6px 10px;border:1px solid #ccc;`;
+        return `<td style="${style}">${esc(val)}</td>`;
+      }).join('') + '</tr>';
+    }).join('');
+
+    const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="UTF-8">
+<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
+<x:Name>Vendors</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
+</x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+</head>
+<body>
+<table style="border-collapse:collapse;font-family:Calibri,Arial,sans-serif;font-size:11pt;">
+<tr>${headHtml}</tr>
+${rowsHtml}
+</table>
+</body>
+</html>`;
+
+    const blob = new Blob(['\ufeff' + html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const filterNote = (filters.search || filters.category || filters.location) ? '-filtered' : '';
+    const date = new Date().toISOString().slice(0, 10);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `vendor-directory${filterNote}-${date}.xls`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  // ---------- Wiring ----------
+  el('addBtn').addEventListener('click', openAddModal);
+  el('exportBtn').addEventListener('click', exportToExcel);
+  el('searchInput').addEventListener('input', (e)=>{ filters.search = e.target.value; render(); });
+  el('locationSelect').addEventListener('change', (e)=>{ filters.location = e.target.value; render(); });
+  el('clearFilters').addEventListener('click', ()=>{
+    filters = { search:'', category:'', location:'' };
+    el('searchInput').value = '';
+    render();
+  });
+
+  loadVendors();
+})();
+</script>
+</body>
+</html>
