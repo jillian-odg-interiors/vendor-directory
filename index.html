@@ -589,8 +589,11 @@
     "Orange County","Georgia","Seattle","Boston","Italy","Australia"];
 
   function renderFilterBar(){
-    const categories = uniqueSorted([...ALL_CATEGORIES, ...vendors.map(v=>v.category)]);
-    const locations = uniqueSorted([...ALL_LOCATIONS, ...vendors.map(v=>v.location)]);
+    // Filters only show categories/locations that actually have a vendor in them —
+    // the full standard lists (ALL_CATEGORIES/ALL_LOCATIONS) are still used as
+    // autocomplete suggestions in the add/edit form, just not here.
+    const categories = uniqueSorted(vendors.map(v=>v.category));
+    const locations = uniqueSorted(vendors.map(v=>v.location));
 
     const chipsHtml = categories.map(cat => {
       const active = filters.category === cat;
